@@ -23,14 +23,13 @@ Enter a positive integer when prompted. For example, with input `10`, the progra
 
 `numleft :: Int -> [Int]` takes the starting count and returns a list containing the survivor. For `n <= 0`, it returns an empty list so the program can report invalid input instead of entering the elimination loop.
 
-For a positive `n`, `numleft` starts a local recursive function, `go`, with the list `[1..n]` and phase `0`. `go` stops when the list contains one person. Otherwise, it:
+For a positive `n`, `numleft` starts a local recursive function, `go`, with the list `[1..n]` and phase `0`. `go` stops when the list contains one person, as a base case.
 
+For a recursive step it otherwise:
 1. Uses `zip [1..] xs` to pair every person with their position in the current round.
-2. Uses `filter (keep phase)` to retain positions allowed by this round's rule.
-3. Uses `map snd` to remove the temporary positions and keep only the person numbers.
+2. Uses `filter (keep phase)` to save values which comply with with filter condition.
+3. Uses `map snd` remap all values by ignoring their index values.
 4. Advances the phase with `(phase + 1) mod 3`, cycling through phases `0`, `1`, and `2`.
-
-`keep` defines the rule for each phase: phase `0` keeps odd positions, phase `1` keeps even positions, and phase `2` keeps positions not divisible by `3`. Since each round zips the current list with `[1..]`, positions restart at `1` after every elimination.
 
 `main` reads an integer from standard input and calls `numleft`. It prints the remaining number when there is one, or asks for a positive integer when the result is empty.
 
@@ -51,7 +50,7 @@ go xs phase =
 
 ## Example Result
 
-![Example result for the functional implementation](imperative/img/result_funct_nonmath.png)
+![Example result for the functional implementation](functional/img/result_funct_nonmath.png)
 
 # Part 2: Imperative Implementation with Python
 
@@ -74,13 +73,13 @@ Enter a positive integer. For example, input `10` produces `3`:
 
 The program reads `n` and creates `arr`, containing the people numbered from `1` to `n`. It starts `phase` at `0` and repeats the elimination rounds while more than one person remains.
 
-Each round creates an empty `arr2` and loops over the current `arr`. The variable `curr` is the current person's position, counted from `1`. Depending on `phase % 3`, the loop appends that person to `arr2` if their position is odd, even, or not divisible by `3`. It then replaces `arr` with `arr2` and increments `phase`, so the three rules repeat. Because positions come from the current loop index, they restart at `1` each round.
+Each round creates an empty `arr2` and loops over the current `arr`, depending on `phase`, the loop appends that person to `arr2` if their position is odd, even, or not divisible by `3`. It then replaces `arr` with `arr2` and increments `phase`, so the three rules repeat. 
 
 When only one person remains, the loop ends and `arr[0]` is printed. The input must be positive; with `n <= 0`, `arr` is empty and there is no remaining element to print.
 
 ### Why It Is Imperative
 
-The Python solution describes the steps to perform: loop over the current list, build a new list by appending retained people, replace the current list, and increment the phase. Its state changes as the program runs, especially when `arr` and `phase` are reassigned. For example, this excerpt builds the next round's list and updates that state:
+The Python uses fully imperative approach which compared to functional does loop over the current list, build a new list by appending retained people, replace the current list, and increment the phase. Its state changes as the program runs, especially when `arr` and `phase` are reassigned. For example, this excerpt builds the next round's list and updates that state:
 
 ```python
 while len(arr) > 1:
@@ -94,4 +93,6 @@ while len(arr) > 1:
 	phase += 1
 ```
 
-The other phase branches use the same loop and append pattern, with different position checks.
+## Example Result
+
+![Example result for the imperative implementation](imperative/img/result_imp_nonmath.png)
