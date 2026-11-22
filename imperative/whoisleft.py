@@ -8,23 +8,19 @@ while len(arr) > 1:
     for i in range(len(arr)):
         curr = i + 1
 
-        if phase == 0:
+        if phase%3 == 0:
             if curr % 2 != 0:
                 arr2.append(arr[i])
 
-        elif phase == 1:
+        elif phase%3 == 1:
             if curr % 2 == 0:
                 arr2.append(arr[i])
 
-        elif phase == 2:
+        elif phase%3 == 2:
             if curr % 3 != 0:
                 arr2.append(arr[i])
 
     arr=arr2
-
     phase+=1
-
-    if phase == 3:
-        phase = 0
 
 print(arr[0])
