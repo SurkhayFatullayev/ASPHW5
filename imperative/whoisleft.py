@@ -1,30 +1,30 @@
+
 n = int(input())
 arr = list(range(1, n + 1))
+phase = 0
 
-def eliminate(arr):
-    phase = 0
-    while len(arr) > 1:
+while len(arr) > 1:
+    arr2 = []
+    for i in range(len(arr)):
+        curr = i + 1
+
         if phase == 0:
-            arr = remove_even(arr)
+            if curr % 2 != 0:
+                arr2.append(arr[i])
+
         elif phase == 1:
-            arr = remove_odd(arr)
-        else:
-            arr = remove_thirds(arr)
+            if curr % 2 == 0:
+                arr2.append(arr[i])
 
-        phase = (phase + 1) % 3
+        elif phase == 2:
+            if curr % 3 != 0:
+                arr2.append(arr[i])
 
-    return arr[0]
+    arr=arr2
 
-def remove_even(arr):
-    return [number for pos, number in enumerate(arr, 1)
-            if pos % 2 != 0]
+    phase+=1
 
-def remove_odd(arr):
-    return [number for pos, number in enumerate(arr, 1)
-            if pos % 2 == 0]
+    if phase == 3:
+        phase = 0
 
-def remove_thirds(arr):
-    return [number for pos, number in enumerate(arr, 1)
-            if pos % 3 != 0]
-
-print(eliminate(arr))
+print(arr[0])
